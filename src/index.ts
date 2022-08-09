@@ -6,20 +6,17 @@ import getPixels from "./tools/getPixelsPromise";
 import toArray from "./tools/toArray";
 import sleep from "./tools/sleep";
 
-const PIXEL_WIDTH = process.stdout.columns;
-const PIXEL_HEIGHT = process.stdout.rows;
-
 enum EncodedValue {
-    A = "▓",
-    B = " ",
-    C = "░",
-    D = "░",
+    A = "▓▓",
+    B = "  ",
+    C = "░░",
+    D = "▒▒",
 }
 
 async function main() {
     if (!fs.existsSync("./frames/lagtrain_1.jpg")) await extractFrames();
 
-    if (!fs.existsSync(`${__dirname}/tmp/ascii.js`) || !require(`./tmp/ascii`)?.default?.data?.length) {
+    if (process.argv.includes("--fresh") || !fs.existsSync(`${__dirname}/tmp/ascii.js`) || !require(`./tmp/ascii`)?.default?.data?.length) {
         console.clear();
         console.log("Processing Frames...");
 
@@ -35,15 +32,18 @@ async function main() {
         for await (let frame of getAllFrames()) {
             let tmp = "`";
 
-            let pixel = toArray(await getPixels(`./frames/${frame}`), PIXEL_WIDTH, PIXEL_HEIGHT, 1);
-            for (let x = 0; x < PIXEL_HEIGHT; x++) {
-                for (let y = 0; y < PIXEL_WIDTH; y++) {
+            let pixelData = await getPixels(`./frames/${frame}`);
+            let shape = pixelData.shape;
+            let pixel = toArray(pixelData, undefined, undefined, 1);
+            for (let x = 0; x < shape[1]; x++) {
+                for (let y = 0; y < shape[0]; y++) {
                     let char: string;
                     let colorCode = pixel[y][x][0];
 
-                    if (colorCode >= 255) char = "A";
-                    else if (colorCode == 0) char = "B";
-                    else char = "C";
+                    if (colorCode >= 200) char = "A";
+                    else if (colorCode <= 15) char = "B";
+                    else if (colorCode <= 170) char = "C";
+                    else char = "D";
 
                     tmp += char;
                 }
@@ -59,8 +59,8 @@ async function main() {
     ]
 }`);
 
-        asciiStream.end();
-        sleep(3000);
+        asciiStream.end(null);
+        await sleep(2000);
     }
 
     await playFrames();

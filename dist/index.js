@@ -33,19 +33,17 @@ const getAllFrames_1 = __importDefault(require("./tools/getAllFrames"));
 const getPixelsPromise_1 = __importDefault(require("./tools/getPixelsPromise"));
 const toArray_1 = __importDefault(require("./tools/toArray"));
 const sleep_1 = __importDefault(require("./tools/sleep"));
-const PIXEL_WIDTH = process.stdout.columns;
-const PIXEL_HEIGHT = process.stdout.rows;
 var EncodedValue;
 (function (EncodedValue) {
-    EncodedValue["A"] = "\u2593";
-    EncodedValue["B"] = " ";
-    EncodedValue["C"] = "\u2591";
-    EncodedValue["D"] = "\u2591";
+    EncodedValue["A"] = "\u2593\u2593";
+    EncodedValue["B"] = "  ";
+    EncodedValue["C"] = "\u2591\u2591";
+    EncodedValue["D"] = "\u2592\u2592";
 })(EncodedValue || (EncodedValue = {}));
 async function main() {
     if (!fs.existsSync("./frames/lagtrain_1.jpg"))
         await (0, extractVideo_1.default)();
-    if (!fs.existsSync(`${__dirname}/tmp/ascii.js`) || !require(`./tmp/ascii`)?.default?.data?.length) {
+    if (process.argv.includes("--fresh") || !fs.existsSync(`${__dirname}/tmp/ascii.js`) || !require(`./tmp/ascii`)?.default?.data?.length) {
         console.clear();
         console.log("Processing Frames...");
         let asciiStream = fs.createWriteStream(`${__dirname}/tmp/ascii.js`, { encoding: "utf-8" });
@@ -57,17 +55,21 @@ async function main() {
         `);
         for await (let frame of (0, getAllFrames_1.default)()) {
             let tmp = "`";
-            let pixel = (0, toArray_1.default)(await (0, getPixelsPromise_1.default)(`./frames/${frame}`), PIXEL_WIDTH, PIXEL_HEIGHT, 1);
-            for (let x = 0; x < PIXEL_HEIGHT; x++) {
-                for (let y = 0; y < PIXEL_WIDTH; y++) {
+            let pixelData = await (0, getPixelsPromise_1.default)(`./frames/${frame}`);
+            let shape = pixelData.shape;
+            let pixel = (0, toArray_1.default)(pixelData, undefined, undefined, 1);
+            for (let x = 0; x < shape[1]; x++) {
+                for (let y = 0; y < shape[0]; y++) {
                     let char;
                     let colorCode = pixel[y][x][0];
-                    if (colorCode >= 255)
+                    if (colorCode >= 200)
                         char = "A";
-                    else if (colorCode == 0)
+                    else if (colorCode <= 15)
                         char = "B";
-                    else
+                    else if (colorCode <= 170)
                         char = "C";
+                    else
+                        char = "D";
                     tmp += char;
                 }
                 tmp += "\n";
@@ -79,8 +81,8 @@ async function main() {
         asciiStream.write(`
     ]
 }`);
-        asciiStream.end();
-        (0, sleep_1.default)(3000);
+        asciiStream.end(null);
+        await (0, sleep_1.default)(2000);
     }
     await playFrames();
 }

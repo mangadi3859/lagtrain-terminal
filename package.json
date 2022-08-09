@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node dist/",
+        "start-fresh": "node dist/ --fresh",
         "dev": "tsc && npm start",
         "start-dev": "ts-node src/",
         "build": "tsc",

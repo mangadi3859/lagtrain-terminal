@@ -1,7 +1,4 @@
-import toArray from "./toArray";
-import getPixels from "./getPixelsPromise";
 import fs from "fs";
-import { PassThrough } from "stream";
 
 export default function (): string[] {
     let frames = fs
