@@ -4,9 +4,8 @@
 # Lagtrain but its on Terminal
 
 ![version](https://img.shields.io/github/package-json/v/mangadi3859/lagtrain-terminal?logo=json&logoColor=blue&style=flat-square)
-
 ![repo-size](https://img.shields.io/github/repo-size/mangadi3859/lagtrain-terminal?color=yellow&logo=square&logoColor=yellow&style=flat-square)
-
+![files](https://img.shields.io/github/directory-file-count/mangadi3859/lagtrain-terminal?color=yellow&label=Files&logo=files&logoColor=yellow&style=flat-square)
 [![typescript](https://img.shields.io/github/package-json/dependency-version/mangadi3859/lagtrain-terminal/dev/typescript?logo=typescript&style=flat-square)](https://www.npmjs.com/package/typescript)
 
 
