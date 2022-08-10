@@ -3,7 +3,9 @@
 
 # Lagtrain but its on Terminal
 
+<br/>
 ![lagtrain](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAwEFvvuVlg4lPcIZGLoeEb6kWKP3cJDzeYQ&usqp=CAU)
+<br/>
 
 ![version](https://img.shields.io/github/package-json/v/mangadi3859/lagtrain-terminal?logo=json&logoColor=blue&style=flat-square)
 ![repo-size](https://img.shields.io/github/repo-size/mangadi3859/lagtrain-terminal?color=yellow&logo=square&logoColor=yellow&style=flat-square)
